@@ -1,0 +1,23 @@
+# Ignore node_modules from host
+node_modules
+
+# Ignore build output created on host
+dist
+build
+
+# Ignore logs
+logs
+*.log
+
+# Ignore tests
+coverage
+.nyc_output
+
+# Ignore OS/IDE
+.DS_Store
+.idea
+.vscode
+
+# Ignore environment files
+.env
+.env.*
