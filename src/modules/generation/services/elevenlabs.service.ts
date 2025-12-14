@@ -18,6 +18,9 @@ export class ElevenLabsService {
       const audioStream = await this.client.textToSpeech.convert(voiceId, {
         outputFormat: 'mp3_44100_128',
         text: text,
+        voiceSettings: {
+          speed: 0.9,
+        },
         modelId: 'eleven_multilingual_v2',
       });
 
