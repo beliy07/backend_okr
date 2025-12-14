@@ -22,3 +22,65 @@ model User {
 
   @@map("users")
 }
+
+model Avatar {
+  id           String  @id @default(uuid())
+  name         String
+  imageUrl     String  @map("image_url")
+  voiceId      String  @map("voice_id")
+  videoUrl     String? @map("video_url")
+  audioUrl     String? @map("audio_url")
+  textTemplate String  @map("text_template")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  generationTasks GenerationTask[]
+
+  @@map("avatars")
+}
+
+enum GenerationTaskStatus {
+  PENDING
+  PROCESSING
+  GENERATING_VOICE
+  GENERATING_VIDEO
+  COMPLETED
+  FAILED
+}
+
+enum GenerationType {
+  AUDIO
+  VIDEO
+}
+
+model GenerationTask {
+  id       String               @id @default(uuid())
+  userId   String               @map("user_id")
+  avatarId String               @map("avatar_id")
+  text     String
+  type     GenerationType       @default(VIDEO)
+  status   GenerationTaskStatus @default(PENDING)
+
+  audioUrl String? @map("audio_url")
+  videoUrl String? @map("video_url")
+
+  errorMessage String? @map("error_message")
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  completedAt DateTime? @map("completed_at")
+
+  avatar Avatar @relation(fields: [avatarId], references: [id], onDelete: Cascade)
+
+  @@map("generation_tasks")
+}
+
+model UserLimits {
+  id     String @id @default(uuid())
+  userId String @unique @map("user_id")
+  audio  Int    @default(5)
+  video  Int    @default(3)
+
+  @@map("user_limits")
+}
